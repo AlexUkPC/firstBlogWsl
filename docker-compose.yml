@@ -1,0 +1,44 @@
+version: "3"
+services:
+  web_firstblogwsl:
+    build:
+      context: .
+      args:
+        USER_ID: "${USER_ID:-1000}"
+        GROUP_ID: "${GROUP_ID:-1000}"
+    ports:
+      - "3002:3000"
+    volumes: 
+      - ./firstblogwsl:/opt/app
+      - gem_cache_firstblogwsl:/gems
+    env_file: 
+      - .env/development/database_firstblogwsl
+      - .env/development/web_firstblogwsl
+    environment: 
+      - WEBPACKER_DEV_SERVER_HOST=webpack_dev_server_firstblogwsl
+  webpack_dev_server_firstblogwsl:
+    build:
+      context: .
+      args:
+        USER_ID: "${USER_ID:-1000}"
+        GROUP_ID: "${GROUP_ID:-1000}"
+    command: ./bin/webpack-dev-server
+    ports: 
+      - "3037:3037"
+    volumes: 
+      - ./firstblogwsl:/opt/app
+      - gem_cache_firstblogwsl:/gems
+    env_file: 
+      - .env/development/database_firstblogwsl
+      - .env/development/web_firstblogwsl
+    environment: 
+      - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
+  database_firstblogwsl:
+    image: postgres
+    env_file: 
+      - .env/development/database_firstblogwsl
+    volumes: 
+      - db_data_firstblogwsl:/var/lib/postgresql/data
+volumes: 
+  db_data_firstblogwsl:
+  gem_cache_firstblogwsl:
