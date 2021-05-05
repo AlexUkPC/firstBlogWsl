@@ -16,6 +16,8 @@ services:
       - .env/development/web_firstblogwsl
     environment: 
       - WEBPACKER_DEV_SERVER_HOST=webpack_dev_server_firstblogwsl
+    networks:
+      - network
   webpack_dev_server_firstblogwsl:
     build:
       context: .
@@ -33,12 +35,18 @@ services:
       - .env/development/web_firstblogwsl
     environment: 
       - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
+    networks:
+      - network
   database_firstblogwsl:
     image: postgres
     env_file: 
       - .env/development/database_firstblogwsl
     volumes: 
       - db_data_firstblogwsl:/var/lib/postgresql/data
+    networks:
+      - network
 volumes: 
   db_data_firstblogwsl:
   gem_cache_firstblogwsl:
+networks:
+  network:
